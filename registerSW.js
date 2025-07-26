@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/manga-offline-vault/sw.js', { scope: '/manga-offline-vault/' })})}
