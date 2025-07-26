@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';  // Use the swc plugin as per your package.json
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
@@ -13,7 +13,7 @@ export default defineConfig({
         name: 'Manga Tracker',
         short_name: 'MangaPWA',
         start_url: '/manga-offline-vault/', // Must match base
-        scope: '/manga-offline-vault/',     // For proper routing
+        scope: '/manga-offline-vault/',    // For proper routing
         display: 'standalone',
         background_color: '#fafcff',
         theme_color: '#a855f7',
