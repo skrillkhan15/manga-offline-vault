@@ -1,0 +1,39 @@
+name: Build APK
+
+on:
+  push:
+    branches:
+      - main  # Change this if your default branch is different
+
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Install Bubblewrap
+        run: npm install -g @bubblewrap/cli
+
+      - name: Generate APK with Bubblewrap
+        run: |
+          bubblewrap init --manifest=https://skrillkhan15.github.io/manga-offline-vault/manifest.json --applicationId=com.skrillkhan15.mangatracker --output=output --skipShellCheck
+          bubblewrap build --verbose --no-sign
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: MangaTrackerAPK
+          path: output/build/outputs/apk/release/app-release-unsigned.apk
