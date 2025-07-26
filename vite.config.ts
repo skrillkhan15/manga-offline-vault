@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/manga-offline-vault/', // Important for GitHub Pages
+  base: '/manga-offline-vault/', // Important for GitHub Pages subpath
   plugins: [
     react(),
     VitePWA({
@@ -13,7 +13,7 @@ export default defineConfig({
         name: 'Manga Tracker',
         short_name: 'MangaPWA',
         start_url: '/manga-offline-vault/', // Must match base
-        scope: '/manga-offline-vault/',     // Add this for proper routing
+        scope: '/manga-offline-vault/',     // For proper routing
         display: 'standalone',
         background_color: '#fafcff',
         theme_color: '#a855f7',
