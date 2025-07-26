@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/manga-offline-vault/',  // <-- Fix for GitHub Pages subpath
+  base: '/manga-offline-vault/', // Important for GitHub Pages
   plugins: [
     react(),
     VitePWA({
@@ -12,23 +12,24 @@ export default defineConfig({
       manifest: {
         name: 'Manga Tracker',
         short_name: 'MangaPWA',
-        start_url: '/manga-offline-vault/',  // <-- Match base here too
+        start_url: '/manga-offline-vault/', // Must match base
+        scope: '/manga-offline-vault/',     // Add this for proper routing
         display: 'standalone',
         background_color: '#fafcff',
         theme_color: '#a855f7',
         icons: [
           {
-            src: '/manga-offline-vault/icons/icon-192x192.png',
+            src: 'icons/icon-192x192.png',
             sizes: '192x192',
             type: 'image/png',
           },
           {
-            src: '/manga-offline-vault/icons/icon-512x512.png',
+            src: 'icons/icon-512x512.png',
             sizes: '512x512',
             type: 'image/png',
           },
           {
-            src: '/manga-offline-vault/icons/maskable-icon.png',
+            src: 'icons/maskable-icon.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
@@ -37,4 +38,8 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
 });
