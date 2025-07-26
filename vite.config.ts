@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
 export default defineConfig({
-  base: '/manga-offline-vault/', // Important for GitHub Pages subpath
+  base: '/manga-offline-vault/', // IMPORTANT: GitHub Pages subpath
   plugins: [
     react(),
     VitePWA({
@@ -13,8 +13,8 @@ export default defineConfig({
       manifest: {
         name: 'Manga Tracker',
         short_name: 'MangaPWA',
-        start_url: '/manga-offline-vault/', // Must match base
-        scope: '/manga-offline-vault/',    // For proper routing
+        start_url: '/manga-offline-vault/',  // Must match base
+        scope: '/manga-offline-vault/',      // For proper routing
         display: 'standalone',
         background_color: '#fafcff',
         theme_color: '#a855f7',
@@ -41,7 +41,7 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),  // Fixes the "@" alias import issue
+      '@': path.resolve(__dirname, 'src'),  // Alias for cleaner imports
     },
   },
   build: {
