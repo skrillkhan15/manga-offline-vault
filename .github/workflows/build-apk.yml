@@ -33,7 +33,7 @@ jobs:
           bubblewrap build --verbose --no-sign
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: MangaTrackerAPK
           path: output/build/outputs/apk/release/app-release-unsigned.apk
