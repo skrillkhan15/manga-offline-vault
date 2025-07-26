@@ -31,8 +31,5 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
           publish_branch: gh-pages
-          # This matches the repo name for correct routing
-          user_name: github-actions
-          user_email: github-actions@github.com
+          publish_dir: ./dist
