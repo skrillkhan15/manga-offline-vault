@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Book, Home, Plus, Settings, Search, Filter, Star, ExternalLink, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, MoreVertical, Download, Upload, Moon, Sun } from 'lucide-react';
+import { Book, Home, Plus, Settings, Search, Filter, Star, ExternalLink, Edit2, Trash2, Eye, ChevronLeft, ChevronRight, MoreVertical, Download, Upload, Moon, Sun, Tag } from 'lucide-react';
 
 // Types
 interface Manga {
@@ -22,7 +22,7 @@ interface Manga {
 
 interface MangaFormData extends Omit<Manga, 'id' | 'createdAt' | 'updatedAt'> {}
 
-type Page = 'home' | 'library' | 'add' | 'settings' | 'detail' | 'edit';
+type Page = 'home' | 'library' | 'add' | 'settings' | 'detail' | 'edit' | 'genres';
 
 const MangaApp: React.FC = () => {
   // State management
@@ -148,6 +148,19 @@ const MangaApp: React.FC = () => {
     planToRead: mangas.filter(m => m.status === 'plan-to-read').length,
   };
 
+  // Genre statistics
+  const getAllGenres = () => {
+    const genreMap = new Map<string, number>();
+    mangas.forEach(manga => {
+      manga.genres.forEach(genre => {
+        genreMap.set(genre, (genreMap.get(genre) || 0) + 1);
+      });
+    });
+    return Array.from(genreMap.entries())
+      .map(([genre, count]) => ({ genre, count }))
+      .sort((a, b) => b.count - a.count);
+  };
+
   // Export/Import functionality
   const exportData = () => {
     const dataStr = JSON.stringify(mangas, null, 2);
@@ -262,6 +275,20 @@ const MangaApp: React.FC = () => {
               }
             }}
             onChapterUpdate={(increment) => updateChapter(selectedManga.id, increment)}
+          />
+        )}
+
+        {currentPage === 'genres' && (
+          <GenresPage
+            genres={getAllGenres()}
+            onGenreClick={(genre) => {
+              setSearchQuery('');
+              setFilterType('all');
+              setFilterStatus('all');
+              setCurrentPage('library');
+              // Filter by genre in library - we'll need to add this functionality
+            }}
+            onNavigate={setCurrentPage}
           />
         )}
 
@@ -1005,6 +1032,13 @@ const BottomNav: React.FC<{
       <span className="text-xs mt-1">Library</span>
     </button>
     <button
+      onClick={() => onNavigate('genres')}
+      className={`bottom-nav-item ${currentPage === 'genres' ? 'active' : ''}`}
+    >
+      <Tag className="w-6 h-6" />
+      <span className="text-xs mt-1">Genres</span>
+    </button>
+    <button
       onClick={() => onNavigate('add')}
       className={`bottom-nav-item ${currentPage === 'add' ? 'active' : ''}`}
     >
@@ -1019,6 +1053,83 @@ const BottomNav: React.FC<{
       <span className="text-xs mt-1">Settings</span>
     </button>
   </nav>
+);
+
+// Genres Page Component
+const GenresPage: React.FC<{
+  genres: { genre: string; count: number }[];
+  onGenreClick: (genre: string) => void;
+  onNavigate: (page: Page) => void;
+}> = ({ genres, onGenreClick, onNavigate }) => (
+  <div className="safe-top p-6">
+    <h1 className="text-2xl font-bold mb-6">Genres</h1>
+    
+    {genres.length === 0 ? (
+      <div className="text-center py-12">
+        <Tag className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+        <h3 className="text-lg font-medium mb-2">No genres found</h3>
+        <p className="text-muted-foreground mb-6">
+          Add some manga with genres to see them here
+        </p>
+        <button 
+          onClick={() => onNavigate('add')}
+          className="btn-primary"
+        >
+          Add Your First Manga
+        </button>
+      </div>
+    ) : (
+      <div className="space-y-4">
+        <p className="text-muted-foreground mb-4">
+          Browse your collection by genre ({genres.length} total)
+        </p>
+        
+        <div className="grid gap-3">
+          {genres.map(({ genre, count }) => (
+            <div
+              key={genre}
+              className="manga-card flex items-center justify-between cursor-pointer hover:scale-[1.02] transition-smooth"
+              onClick={() => onGenreClick(genre)}
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
+                  <Tag className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-medium">{genre}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    {count} {count === 1 ? 'title' : 'titles'}
+                  </p>
+                </div>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </div>
+          ))}
+        </div>
+        
+        {/* Quick Actions */}
+        <div className="mt-8 pt-6 border-t border-border">
+          <h3 className="font-semibold mb-4">Quick Actions</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <button 
+              onClick={() => onNavigate('library')}
+              className="btn-secondary flex items-center justify-center gap-2 py-3"
+            >
+              <Book className="w-5 h-5" />
+              Browse All
+            </button>
+            <button 
+              onClick={() => onNavigate('add')}
+              className="btn-primary flex items-center justify-center gap-2 py-3"
+            >
+              <Plus className="w-5 h-5" />
+              Add New
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
 );
 
 export default MangaApp;
