@@ -5,6 +5,9 @@ import path from 'path';
 
 export default defineConfig({
   base: '/manga-offline-vault/', // IMPORTANT: GitHub Pages subpath
+  server: {
+    port: 8080
+  },
   plugins: [
     react(),
     VitePWA({
