@@ -2,10 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
-import { componentTagger } from "lovable-tagger";
+import { componentTagger } from 'lovable-tagger';
 
 export default defineConfig(({ mode }) => ({
-  base: '/manga-offline-vault/', // IMPORTANT: GitHub Pages subpath
+  base: '/manga-offline-vault/', // GitHub Pages path
   server: {
     host: "::",
     port: 8080,
@@ -19,8 +19,8 @@ export default defineConfig(({ mode }) => ({
       manifest: {
         name: 'Manga Tracker',
         short_name: 'MangaPWA',
-        start_url: '/manga-offline-vault/',  // Must match base
-        scope: '/manga-offline-vault/',      // For proper routing
+        start_url: '/manga-offline-vault/',
+        scope: '/manga-offline-vault/',
         display: 'standalone',
         background_color: '#fafcff',
         theme_color: '#a855f7',
@@ -47,7 +47,7 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),  // Alias for cleaner imports
+      '@': path.resolve(__dirname, 'src'),
     },
   },
   build: {
