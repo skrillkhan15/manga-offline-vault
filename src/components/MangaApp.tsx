@@ -32,6 +32,7 @@ const MangaApp: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterGenre, setFilterGenre] = useState<string>('all');
   const [isDarkMode, setIsDarkMode] = useState(() => {
     return localStorage.getItem('darkMode') === 'true' || 
            window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -136,7 +137,8 @@ const MangaApp: React.FC = () => {
                          manga.author.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesType = filterType === 'all' || manga.type === filterType;
     const matchesStatus = filterStatus === 'all' || manga.status === filterStatus;
-    return matchesSearch && matchesType && matchesStatus;
+    const matchesGenre = filterGenre === 'all' || manga.genres.includes(filterGenre);
+    return matchesSearch && matchesType && matchesStatus && matchesGenre;
   });
 
   // Statistics for home page
@@ -285,8 +287,8 @@ const MangaApp: React.FC = () => {
               setSearchQuery('');
               setFilterType('all');
               setFilterStatus('all');
+              setFilterGenre(genre);
               setCurrentPage('library');
-              // Filter by genre in library - we'll need to add this functionality
             }}
             onNavigate={setCurrentPage}
           />
